@@ -218,8 +218,9 @@ public class NewsDataSource {
 	{		
 		String query = "SELECT * FROM " + NEWS 
 				+ " WHERE " 
-					+ DATE + "='" + new java.sql.Timestamp( news.getDate().getTime() ) + "'"
-					+ " AND " + SUBJECT + "='" +news.getSubject() + "'"
+//					+ DATE + "='" + new java.sql.Timestamp( news.getDate().getTime() ) + "'"
+//					+ " AND " + 
+					+ SUBJECT + "='" +news.getSubject() + "'"
 					+ " AND " + NEWS + "." + FESTIVAL_ID + "= '" + festivalID + "'";
 		
 		Cursor cursor = database.rawQuery(query, null);

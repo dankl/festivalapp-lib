@@ -14,7 +14,11 @@ public class News implements Comparable<News>{
 	String festival;
 	
 	public News()
-	{}
+	{
+		this.date = new Date();
+		this.subject = "";
+		this.msg = "";
+	}
 	
 	public News(String s, String msg)
 	{

@@ -74,10 +74,24 @@ public class FlavorProvider {
 	}
 	
 	/**
+	 * EncyclopediaMetallum contains sometimes comments like "(early)" or "(later)"
+	 * @param flavor
+	 * @return
+	 */
+	private String cleanUpEncyclopediaMetallumComments(String flavor)
+	{
+		if (flavor.indexOf("(") != -1)
+			flavor = flavor.substring(0, flavor.indexOf("("));
+		return flavor.trim();
+	}
+	
+	/**
 	 * download genre infos from encyclopedia metallum
 	 */
 	private List<String> getFromEncyclopediaMetallum(String bandname)
 	{
+		ArrayList<String> flavors = new ArrayList<String>();
+		
 		String url = "http://www.metal-archives.com/bands/" + bandNameToWikipedianame( bandname );
 		Log.w("getFromEncyclopediaMetallum", url);
 		
@@ -92,10 +106,11 @@ public class FlavorProvider {
 
 			if (e1 != null)
 			{
-				return normalizeFlavor( e1.text() );
+				for(String flavor : normalizeFlavor( e1.text() ) )
+					flavors.add( cleanUpEncyclopediaMetallumComments(flavor));
 			}
 		}		
-		return new ArrayList<String>();
+		return flavors;
 	}
 	
 	

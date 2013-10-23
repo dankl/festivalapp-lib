@@ -195,7 +195,9 @@ public class Band {
 	
 	public String getFlavorsAsString()
 	{
-		return this.flavors.toString();
+		if (this.flavors.size() > 0)
+			return this.flavors.toString();
+		return "";
 	}
 	
 	public void setLogoFile(String f)

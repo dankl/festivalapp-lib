@@ -9,6 +9,8 @@ import android.content.Intent;
 
 public abstract class ProviderServiceBase extends IntentService {
 	
+	protected DownloadFilesTask downloadFile = new DownloadFilesTask();
+	
 	public ProviderServiceBase()
 	{
 		super("DataProviderService");
@@ -87,7 +89,7 @@ public abstract class ProviderServiceBase extends IntentService {
 		// download detail page and parse detail
 		for(Band band:bands)
 		{			
-			if (j < 3) // TODO Remove for final
+//			if (j < 3) // TODO Remove for final
 				datasource.insertBand( getBandDetailed(band), getFestivalName() );
 			
 			j++;
@@ -126,11 +128,15 @@ public abstract class ProviderServiceBase extends IntentService {
 		datasource.open();
 
 		String festivalID = getFestivalName();
-		
+				
+		int i = 0;
 		for (News news : newsList)
 		{
+//			if (i < 2)
 			if ( ! datasource.existsNews(news, festivalID) )
 				datasource.insertData( getNewsDetailed( news ), festivalID );
+			
+			i++;
 		}
 
 		datasource.close();
@@ -173,7 +179,44 @@ public abstract class ProviderServiceBase extends IntentService {
 					gig.endTime,
 					gig.stage,
 					getFestivalName() );
-						
 		}
 	}
+	
+	/**
+	 * downloads the band logo to a predefined folder
+	 * if the download was successfully returns the bandlogo file name, otherwise returns null
+	 * @param logoUrl
+	 * @param bandName
+	 * @return
+	 */
+	protected String getBandLogo(String logoUrl, String bandName)
+	{
+		String relLogoUrlFiletype = logoUrl.substring(logoUrl.lastIndexOf("."));
+		String logoFileName = bandName + "_logo_" + getFestivalName() + relLogoUrlFiletype;
+
+		if ( downloadFile.downloadUrlToFile(logoUrl, logoFileName ) )
+			return logoFileName;
+		
+		return null;
+	}
+	
+	/**
+	 * downloads the band picture to the predefined folder
+	 * if the download was successfully returns the bandfoto file name, otherwise returns null
+	 * @param fotoUrl
+	 * @param bandName
+	 * @return
+	 */
+	protected String getBandPicture(String fotoUrl, String bandName)
+	{
+		String fotoUrlFiletype = fotoUrl.substring(fotoUrl.lastIndexOf("."));
+		String fotoFileName =  bandName + fotoUrlFiletype;
+		
+		if ( downloadFile.downloadUrlToFile(fotoUrl, fotoFileName ) )
+			return fotoFileName;
+		
+		return null;
+	}
+	
+	
 }
